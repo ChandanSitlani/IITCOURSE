@@ -1,0 +1,17 @@
+CS425: Database Organization
+Professor: Boris Glavic
+
+This is an instro course for database organization
+We learned Relational Algebra and POSTGRESQL.
+
+Description:
+Databases management systems are a crucial part of most large-scale industry and open-source systems. 
+This course familiarizes students with important concepts of database systems and design. 
+We will learn how to design a database using the Entity-Relationship model, 
+how query and modify a database using the declarative SQL language, and study APIs 
+for write application programs that use a database system to persist data. Furthermore, 
+the course given an overview of important database systems techniques such as indexing, 
+query optimization and execution, concurrency control, and recovery.
+
+Course Website: http://www.cs.iit.edu/%7ecs425/
+syllabus: http://cs.iit.edu/%7ecs425/files/syllabus.pdf
