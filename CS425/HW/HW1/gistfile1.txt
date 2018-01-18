@@ -1,0 +1,39 @@
+-- this is an example
+
+group: nameOfTheNewGroup 
+
+
+Student = {
+	sid:string, name:string, dept:string
+	001         , 'Alice'    , 'CS'       
+	002         , 'Bob'      , 'EE'       
+	003         , 'Carol'    , 'CS'       
+	004         , 'David'    , 'PHYS'     
+}
+
+Course = {
+	cid:string		,title:string					,dept:string, credits:number
+	'CS425'         , 'Databases'    			, 'CS',       3
+	'CS595'         , 'Database Security' , 'EE',       3
+	'EE591'         , 'Microcomputers'    , 'CS',       3
+	'EE401'         , 'VLSI Design'    		, 'PHYS',     3
+	'PHYS571'				,'Radiation Physics'		, 'PHYS', 			3
+}
+
+Enroll = {
+cid:string		,sid:string					,grade:string, gradepoint:number
+'CS425'				001										A						4.0
+'CS595'				001										B 					3.0
+'CS595'				002										A						4.0
+'EE401'				001										A						4.0
+'EE401'				002										B						3.0
+'EE401'				004										A						4.0
+'PHYS571'			002										C						2.0
+'PHYS571'			004										A						4.0
+}
+
+Prereq = {
+cid:string, pid:string
+'CS595'			'CS425'
+'EE591'			'EE401'
+}

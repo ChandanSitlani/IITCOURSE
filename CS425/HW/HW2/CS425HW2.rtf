@@ -1,0 +1,112 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww15180\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 2.2.1.\
+ALTER TABLE student ADD advisorid VARCHAR(10);\
+ALTER TABLE student \
+    ADD FOREIGN KEY (advisorid) \
+        REFERENCES faculty(facultyid)\
+        ON DELETE SET NULL\
+        ON UPDATE CASCADE;\
+2.1.2.        \
+ALTER TABLE student \
+    ADD CONSTRAINT valcheck \
+    CHECK (gpa >= 0 and gpa <= 4);\
+ALTER TABLE student\
+    ALTER COLUMN gpa SET DEFAULT 3;\
+ALTER TABLE student\
+    ALTER COLUMN gpa SET NOT NULL;\
+\
+2.2.1.\
+SELECT distinct studentid,name from \
+    student natural join book_checkout\
+    WHERE date + interval '1 month' < current_date \
+\
+2.2.2.\
+SELECT studentid,name FROM student\
+WHERE gpa > (SELECT avg(gpa) from student)\
+\
+2.2.3\
+SELECT facultyid,name FROM faculty\
+WHERE (facultyid NOT IN (SELECT instructorid FROM course) AND salary > 80000)\
+\
+2.2.4\
+SELECT bookid,title \
+FROM book NATURAL JOIN (SELECT textbookid AS bookid FROM course\
+         GROUP BY textbookid\
+         HAVING count(*) > 1)as duplicatebook\
+\
+2.2.5\
+SELECT distinct studentid FROM\
+book natural join (SELECT distinct studentid FROM book natural join book_checkout\
+         GROUP BY studentid\
+         HAVING SUM(price)>100)as students\
+\
+2.2.6\
+SELECT studentid, name FROM student NATURAL JOIN\
+(SELECT distinct studentid FROM book_checkout \
+WHERE (studentid NOT IN (SELECT studentid FROM\
+enroll NATURAL RIGHT OUTER JOIN (SELECT studentid, courseid FROM \
+(SELECT courseid, textbookid as bookid From course)as books NATURAL JOIN book_checkout)AS n\
+WHERE enroll.studentid = n.studentid)))AS nnn\
+\
+2.2.7\
+SELECT studentid, name FROM student NATURAL JOIN\
+(SELECT studentid FROM student\
+WHERE (student.studentid NOT IN (SELECT studentid FROM enroll) OR student.studentid IN \
+(SELECT studentid FROM (SELECT studentid, count(bookid)AS n1 FROM book_checkout GROUP BY studentid)as bo NATURAL JOIN\
+(SELECT studentid, count(courseid)AS n2 FROM enroll GROUP BY studentid)as en\
+WHERE n1>n2 OR n1= n2)))as ennn\
+\
+2.2.8\
+SELECT title,bookid FROM book NATURAL LEFT OUTER JOIN \
+	(SELECT title, textbookid as bookid FROM course)as co\
+WHERE total_copies >3 OR total_copies = 3\
+\
+2.2.9\
+SELECT co.courseid, title FROM \
+	(SELECT bookid from book WHERE price = (SELECT max(price) FROM book))as coco \
+	NATURAL LEFT OUTER JOIN \
+    (SELECT courseid, title, textbookid as bookid FROM course)as co\
+\
+2.2.10\
+SELECT studentid FROM (SELECT studentid,count(courseid)as coun FROM (SELECT * FROM course\
+	NATURAL JOIN enroll\
+    WHERE (title like '%Finance%'))as co \
+    GROUP BY studentid)as coco\
+WHERE (coun = (SELECT count(courseid) from course\
+		where (title like '%Finance%')))\
+\
+2.3.1\
+delete from course \
+where course.courseid not in \
+(SELECT courseid FROM enroll CROSS JOIN student\
+WHERE enroll.studentid = student.studentid)\
+\
+2.3.2\
+insert into book(title,price,total_copies) values('Distributed and Cloud Computing',50.00,4)\
+\
+2.3.3\
+UPDATE book_checkout SET bookid = '2'\
+WHERE studentid = '4' AND bookid = '1'\
+\
+2.3.4\
+UPDATE student SET gpa = (CASE\
+                         WHEN gpa is NULL THEN 0\
+                         WHEN gpa > 4 THEN 4\
+                         WHEN gpa < 0 THEN 0\
+                         END)\
+WHERE (gpa is NULL OR gpa>4 OR gpa<0)\
+\
+2.3.5\
+UPDATE faculty SET \
+salary = salary + coco.count * 1000 FROM \
+            (SELECT facultyid,count(courseid) FROM \
+                    (SELECT courseid, instructorid as facultyid FROM course)as co \
+                NATURAL JOIN faculty \
+                GROUP BY facultyid)as coco\
+WHERE faculty.facultyid = coco.facultyid}
