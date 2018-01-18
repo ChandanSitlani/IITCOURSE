@@ -1,2 +1,2 @@
 # IITCOURSE
-My lecture notes and resources
+My lecture notes & codes resources
